@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package sso.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/empty.proto";
+import "sso/v1/pagination.proto";
+
+option go_package = "loki/internal/app/rpcs/proto/sso/v1;ssov1";
+
+// Permission service provides CRUD operations for managing permissions
+service PermissionService {
+  rpc List(PaginatedListRequest) returns (ListPermissionsResponse) {}
+  rpc Get(GetPermissionRequest) returns (GetPermissionResponse) {}
+  rpc Create(CreatePermissionRequest) returns (CreatePermissionResponse) {}
+  rpc Update(UpdatePermissionRequest) returns (UpdatePermissionResponse) {}
+  rpc Delete(DeletePermissionRequest) returns (google.protobuf.Empty) {}
+}
+
+// Permission represents a user permission object
+message Permission {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string name = 2 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 100
+    }
+  }];
+  string description = 3 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 2048
+    }
+  }];
+}
+
+// ListPermissionsResponse is the response for the List method
+message ListPermissionsResponse {
+  repeated Permission data = 1;
+  PaginationMeta meta = 2;
+}
+
+// GetPermissionRequest is the request for the Get method
+message GetPermissionRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+// GetPermissionResponse is the response for the Get method
+message GetPermissionResponse {
+  Permission data = 1;
+}
+
+// CreatePermissionRequest is the request for the Create method
+message CreatePermissionRequest {
+  string name = 1 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 100
+    }
+  }];
+  string description = 2 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 2048
+    }
+  }];
+}
+
+// CreatePermissionResponse is the response for the Create method
+message CreatePermissionResponse {
+  Permission data = 1;
+}
+
+// UpdatePermissionRequest is the request for the Update method
+message UpdatePermissionRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string name = 2 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 100
+    }
+  }];
+  string description = 3 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 2048
+    }
+  }];
+}
+
+// UpdatePermissionResponse is the response for the Update method
+message UpdatePermissionResponse {
+  Permission data = 1;
+}
+
+// DeletePermissionRequest is the request for the Delete method
+message DeletePermissionRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
