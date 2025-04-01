@@ -6,6 +6,7 @@ import "buf/validate/validate.proto";
 
 option go_package = "loki/internal/app/rpcs/proto/sso/v1;ssov1";
 
+// PaginatedListRequest is the request for the List method
 message PaginatedListRequest {
   uint64 limit = 1 [(buf.validate.field) = {
     uint64: {gte: 1}
@@ -15,6 +16,7 @@ message PaginatedListRequest {
   }];
 }
 
+// PaginationMeta pagination metadata
 message PaginationMeta {
   uint64 page = 1;
   uint64 per = 2;
