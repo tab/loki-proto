@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package sso.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/empty.proto";
+import "sso/v1/pagination.proto";
+
+option go_package = "loki/internal/app/rpcs/proto/sso/v1;ssov1";
+
+// Role service provides CRUD operations for managing user roles
+service RoleService {
+  rpc List(PaginatedListRequest) returns (ListRolesResponse) {}
+  rpc Get(GetRoleRequest) returns (GetRoleResponse) {}
+  rpc Create(CreateRoleRequest) returns (CreateRoleResponse) {}
+  rpc Update(UpdateRoleRequest) returns (UpdateRoleResponse) {}
+  rpc Delete(DeleteRoleRequest) returns (google.protobuf.Empty) {}
+}
+
+// Role represents a role object
+message Role {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string name = 2 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 100
+    }
+  }];
+  string description = 3 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 2048
+    }
+  }];
+  repeated string permission_ids = 4 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+}
+
+// ListRolesResponse is the response for the List method
+message ListRolesResponse {
+  repeated Role data = 1;
+  PaginationMeta meta = 2;
+}
+
+// GetRoleRequest is the request for the Get method
+message GetRoleRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+// GetRoleResponse is the response for the Get method
+message GetRoleResponse {
+  Role data = 1;
+}
+
+// CreateRoleRequest is the request for the Create method
+message CreateRoleRequest {
+  string name = 1 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 100
+    }
+  }];
+  string description = 2 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 2048
+    }
+  }];
+  repeated string permission_ids = 3 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+}
+
+// CreateRoleResponse is the response for the Create method
+message CreateRoleResponse {
+  Role data = 1;
+}
+
+// UpdateRoleRequest is the request for the Update method
+message UpdateRoleRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string name = 2 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 100
+    }
+  }];
+  string description = 3 [(buf.validate.field) = {
+    string: {
+      min_len: 1
+      max_len: 2048
+    }
+  }];
+  repeated string permission_ids = 4 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+}
+
+// UpdateRoleResponse is the response for the Update method
+message UpdateRoleResponse {
+  Role data = 1;
+}
+
+// DeleteRoleRequest is the request for the Delete method
+message DeleteRoleRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
