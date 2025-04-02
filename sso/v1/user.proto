@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package sso.v1;
+
+import "buf/validate/validate.proto";
+import "google/protobuf/empty.proto";
+import "sso/v1/pagination.proto";
+
+option go_package = "loki/internal/app/rpcs/proto/sso/v1;ssov1";
+
+// User service provides CRUD operations for managing users
+service UserService {
+  rpc List(PaginatedListRequest) returns (ListUsersResponse) {}
+  rpc Get(GetUserRequest) returns (GetUserResponse) {}
+  rpc Create(CreateUserRequest) returns (CreateUserResponse) {}
+  rpc Update(UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc Delete(DeleteUserRequest) returns (google.protobuf.Empty) {}
+}
+
+// User represents a user object
+message User {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string identity_number = 2 [(buf.validate.field).string = {
+    min_len: 15
+    max_len: 20
+  }];
+  string personal_code = 3 [(buf.validate.field).string = {
+    min_len: 11
+    max_len: 20
+  }];
+  string first_name = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  string last_name = 5 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  repeated string role_ids = 6 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+  repeated string scope_ids = 7 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+}
+
+// ListUsersResponse is the response for the List method
+message ListUsersResponse {
+  repeated User data = 1;
+  PaginationMeta meta = 2;
+}
+
+// GetUserRequest is the request for the Get method
+message GetUserRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
+
+// GetUserResponse is the response for the Get method
+message GetUserResponse {
+  User data = 1;
+}
+
+// CreateUserRequest is the request for the Create method
+message CreateUserRequest {
+  string identity_number = 1 [(buf.validate.field).string = {
+    min_len: 15
+    max_len: 20
+  }];
+  string personal_code = 2 [(buf.validate.field).string = {
+    min_len: 11
+    max_len: 20
+  }];
+  string first_name = 3 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  string last_name = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  repeated string role_ids = 5 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+  repeated string scope_ids = 6 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+}
+
+// CreateUserResponse is the response for the Create method
+message CreateUserResponse {
+  User data = 1;
+}
+
+// UpdateUserRequest is the request for the Update method
+message UpdateUserRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+  string identity_number = 2 [(buf.validate.field).string = {
+    min_len: 15
+    max_len: 20
+  }];
+  string personal_code = 3 [(buf.validate.field).string = {
+    min_len: 11
+    max_len: 20
+  }];
+  string first_name = 4 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  string last_name = 5 [(buf.validate.field).string = {
+    min_len: 1
+    max_len: 50
+  }];
+  repeated string role_ids = 6 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+  repeated string scope_ids = 7 [(buf.validate.field) = {
+    repeated: {
+      items: {
+        string: {
+          uuid: true
+        }
+      }
+    }
+  }];
+}
+
+// UpdateUserResponse is the response for the Update method
+message UpdateUserResponse {
+  User data = 1;
+}
+
+// DeleteUserRequest is the request for the Delete method
+message DeleteUserRequest {
+  string id = 1 [(buf.validate.field).string = {uuid: true}];
+}
